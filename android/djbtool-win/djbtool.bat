@@ -1,6 +1,6 @@
-: DJBTool v1.00 Batch Script created by djb77 / XDA Developers
+: DJBTool v1.01 Batch Script created by djb77 / XDA Developers
 : Inspired and slightly based on APK-MuiltiTool by raziel23x / XDA Developers
-: Build Date: 5th September 2016
+: Build Date: 3rd October 2016
 
 : INITIAL SETUP
 : -------------
@@ -11,7 +11,7 @@ if not exist "%~dp0files_new/" (mkdir "%~dp0files_new")
 if not exist "%~dp0files_original/" (mkdir "%~dp0files_original")
 if not exist "%~dp0files_to_sign/" (mkdir "%~dp0files_to_sign")
 if not exist "%~dp0framework/" (mkdir "%~dp0framework")
-set djbtoolversion=1.00
+set djbtoolversion=1.01
 set djbtoollog=%~dp0djbtool_log.log
 title DJBTool v%djbtoolversion%
 cls
@@ -48,6 +48,12 @@ set /A count+=1
 set tmpstore=%%~nF%%~xF
 )
 IF %count%==1 (set capp=%tmpstore%)
+if exist "%programfiles(x86)%" (goto 64bit) else (goto 32bit)
+:64bit
+set 7zip=%~dp0tools\7za-x64.exe
+goto mainmenu
+:32bit
+set 7zip=%~dp0tools\7za.exe
 
 : MAIN MENU
 : ---------
@@ -206,8 +212,8 @@ mkdir %~dp0files_new
 if exist "%~dp0files_new\%capp%" (del /Q "%~dp0files_new\%capp%")
 java -Xmx%heapy%m -jar %~dp0bin/apktool.jar b "%~dp0files_decompiled/%capp%" -o "%~dp0files_new\%capp%" >nul
 if (%jar%)==(0) (goto :nojar)
-%~dp0bin\7za x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%capp%" META-INF -r >nul
-%~dp0bin\7za a -tzip "%~dp0files_new/%capp%" "%~dp0files_decompiled/temp/*" -mx%usrc% -r >nul
+%7zip% x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%capp%" META-INF -r >nul
+%7zip% a -tzip "%~dp0files_new/%capp%" "%~dp0files_decompiled/temp/*" -mx%usrc% -r >nul
 rmdir /S /Q "%~dp0%~dp0files_decompiled/temp"
 goto mainmenu
 :nojar
@@ -225,21 +231,21 @@ if %errorlevel%==2 (call :syscom02)
 :syscom01
 rmdir /S /Q "%~dp0keep"
 mkdir %~dp0keep
-%~dp0bin\7za x -o"%~dp0keep" "%~dp0files_original\%capp%" >nul
+%7zip% x -o"%~dp0keep" "%~dp0files_original\%capp%" >nul
 @echo.
 echo A new folder called "keep" has been made in the 
 echo main directory. Remove files that you don't want to keep.
 pause
-%~dp0bin\7za a -tzip "%~dp0files_new/%capp%" "%~dp0keep/*" -mx%usrc% -r >nul
+%7zip% a -tzip "%~dp0files_new/%capp%" "%~dp0keep/*" -mx%usrc% -r >nul
 rmdir /S /Q "%~dp0keep"
-%~dp0bin\7za x -o"%~dp0files_decompiled/temp" "%~dp0files_new/%capp%" resources.arsc -r >nul
-%~dp0bin\7za a -tzip "%~dp0files_new/%capp%" "%~dp0files_decompiled/temp/resources.arsc" -mx%resusrc% -r >nul
+%7zip% x -o"%~dp0files_decompiled/temp" "%~dp0files_new/%capp%" resources.arsc -r >nul
+%7zip% a -tzip "%~dp0files_new/%capp%" "%~dp0files_decompiled/temp/resources.arsc" -mx%resusrc% -r >nul
 rmdir /S /Q "%~dp0files_decompiled/temp"
 cd ..
 call :done
 :syscom02
-%~dp0bin\7za x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%capp%" META-INF -r >nul
-%~dp0bin\7za a -tzip "%~dp0files_new/%capp%" "%~dp0files_decompiled/temp/*" -mx%usrc% -r >nul
+%7zip% x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%capp%" META-INF -r >nul
+%7zip% a -tzip "%~dp0files_new/%capp%" "%~dp0files_decompiled/temp/*" -mx%usrc% -r >nul
 rmdir /S /Q "%~dp0files_decompiled/temp"
 goto syscom03
 :syscom03
@@ -248,8 +254,8 @@ choice /c YN /n /m "Would you like to copy the AndroidManifest.xml (Y/N) "
 if %errorlevel%==1 (call :syscom04)
 if %errorlevel%==2 (call :syscom05)
 :syscom04
-%~dp0bin\7za x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%capp%" AndroidManifest.xml -r >nul
-%~dp0bin\7za a -tzip "%~dp0files_new/%capp%" "%~dp0files_decompiled/temp/AndroidManifest.xml" -mx%usrc% -r >nul
+%7zip% x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%capp%" AndroidManifest.xml -r >nul
+%7zip% a -tzip "%~dp0files_new/%capp%" "%~dp0files_decompiled/temp/AndroidManifest.xml" -mx%usrc% -r >nul
 rmdir /S /Q "%~dp0files_decompiled/temp"
 call :done
 :syscom05
@@ -271,16 +277,16 @@ if /I !count! leq 9 (
 echo Compiling %%f
 if exist "%~dp0files_new\%%f" (del /Q "%~dp0files_new\%%f")
 java -Xmx%heapy%m -jar %~dp0bin\apktool.jar b "%~dp0files_decompiled/%%f" -o "%~dp0files_new\%%f" >nul
-%~dp0bin\7za x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%%f" META-INF -r >nul
-%~dp0bin\7za a -tzip "%~dp0files_new/%%f" "%~dp0files_decompiled/temp/*" -mx%usrc% -r >nul
+%7zip% x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%%f" META-INF -r >nul
+%7zip% a -tzip "%~dp0files_new/%%f" "%~dp0files_decompiled/temp/*" -mx%usrc% -r >nul
 rmdir /S /Q "%~dp0files_decompiled/temp"
 )
 if /I !count! gtr 10 (
 echo Compiling %%f
 if exist "%~dp0files_new\%%f" (del /Q "%~dp0files_new\%%f")
 java -Xmx%heapy%m -jar %~dp0bin\apktool.jar b "%~dp0files_decompiled/%%f" -o "%~dp0files_new\%%f" >nul
-%~dp0bin\7za x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%%f" META-INF -r >nul
-%~dp0bin\7za a -tzip "%~dp0files_new/%%f" "%~dp0files_decompiled/temp/*" -mx%usrc% -r >nul
+%7zip% x -o"%~dp0files_decompiled/temp" "%~dp0files_original/%%f" META-INF -r >nul
+%7zip% a -tzip "%~dp0files_new/%%f" "%~dp0files_decompiled/temp/*" -mx%usrc% -r >nul
 rmdir /S /Q "%~dp0files_decompiled/temp"
 )
 )

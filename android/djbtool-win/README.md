@@ -1,4 +1,4 @@
-# DJBTool version 1.02
+# DJBTool version 1.03
 Web URL: http://forum.xda-developers.com/showthread.php?t=3455067
 
 ![alt tag](https://github.com/djb77/windows_scripts/raw/djbtool-win/android/djbtool-win/djbtool.gif?raw=true?raw=true)
@@ -7,9 +7,9 @@ Inspired by APKMultiTool (created by raziel23x / XDA)
 
 Created by djb77 / XDA (some portions from APKMultiTool by raziel23x / XDA)
 
-Build Date: 16th October 2016
+Build Date: 6th December 2016
 
-Using APKTool 2.2.0 and 7-Zip 16.04
+Using APKTool 2.2.1 and 7-Zip 16.04
 
 ## REQUIREMENTS
 - Windows Operating System (Windows 7 or newer)

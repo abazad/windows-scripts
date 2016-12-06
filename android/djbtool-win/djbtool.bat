@@ -1,6 +1,6 @@
 : DJBTool v1.02 Batch Script created by djb77 / XDA Developers
 : Inspired and slightly based on APK-MuiltiTool by raziel23x / XDA Developers
-: Build Date: 16th October 2016
+: Build Date: 6th December 2016
 
 : INITIAL SETUP
 : -------------
@@ -11,7 +11,7 @@ if not exist "%~dp0files_new/" (mkdir "%~dp0files_new")
 if not exist "%~dp0files_original/" (mkdir "%~dp0files_original")
 if not exist "%~dp0files_to_sign/" (mkdir "%~dp0files_to_sign")
 if not exist "%~dp0framework/" (mkdir "%~dp0framework")
-set djbtoolversion=1.02
+set djbtoolversion=1.03
 set djbtoollog=%~dp0djbtool_log.log
 title DJBTool v%djbtoolversion%
 cls
@@ -29,6 +29,7 @@ for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1)
   set "DEL=%%a"
 )
 color 07
+:setup2
 set usrc=9
 set resusrc=0
 set dec=0
@@ -128,7 +129,7 @@ IF "!capp:%ext%=!" neq "%capp%" set jar=1
 goto decomp_start
 :chc
 set capp=None
-goto mainmenu
+goto setup2
 :decomp_start
 @echo.
 @echo Decompiling %capp%
@@ -202,7 +203,7 @@ if "!capp:%ext%=!" NEQ "%capp%" set jar=1
 goto syscom
 :chc
 set capp=None
-goto mainmenu
+goto setup2
 :syscom
 if not exist "%~dp0files_decompiled\%capp%" goto dirnada
 cd %~dp0bin
@@ -220,7 +221,7 @@ goto mainmenu
 if errorlevel 1 (
 echo "An Error Occurred, Please Check The Log"
 pause
-goto mainenu
+goto setup2
 )
 :nq1
 @echo.
@@ -371,7 +372,7 @@ del /f /q %~dp0files_decompiled
 mkdir %~dp0files_decompiled
 call :done
 :cc_2
-goto mainmenu
+goto setup2
 
 : CLEAN NEW
 : ---------
@@ -398,7 +399,7 @@ call :colorecho 0e "                   --- ABOUT  DJBTOOL ---"
 @echo.
 type %~dp0bin\about
 pause
-goto mainmenu
+goto setup2
 
 : -----------
 : SUBROUTINES
@@ -430,7 +431,7 @@ exit /b
 call :colorecho 0f "Done ..."
 @echo.
 pause
-goto mainmenu
+goto setup2
 exit /b
 
 :exit

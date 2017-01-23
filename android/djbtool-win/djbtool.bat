@@ -1,6 +1,6 @@
-: DJBTool v1.02 Batch Script created by djb77 / XDA Developers
+: DJBTool v1.04 Batch Script created by djb77 / XDA Developers
 : Inspired and slightly based on APK-MuiltiTool by raziel23x / XDA Developers
-: Build Date: 6th December 2016
+: Build Date: 24th January 2017
 
 : INITIAL SETUP
 : -------------
@@ -11,7 +11,7 @@ if not exist "%~dp0files_new/" (mkdir "%~dp0files_new")
 if not exist "%~dp0files_original/" (mkdir "%~dp0files_original")
 if not exist "%~dp0files_to_sign/" (mkdir "%~dp0files_to_sign")
 if not exist "%~dp0framework/" (mkdir "%~dp0framework")
-set djbtoolversion=1.03
+set djbtoolversion=1.04
 set djbtoollog=%~dp0djbtool_log.log
 title DJBTool v%djbtoolversion%
 cls
@@ -305,15 +305,22 @@ call :colorecho 0e "                 --- INSTALL  FRAMEWORK ---"
 @echo "framework" folder
 @echo.
 @echo framework-res.apk (found in /system/framework)
-@echo twframework-res.apk (found in /system/framework)
+@echo twframework-res.apk (found in /system/framework for MM)
+@echo samsung-framework-res.apk (found in /system/framework/samsung-framework-res for N)
 @echo SystemUI.apk (found in /system/priv-app/SystemUI)
 @echo.
 pause
 @echo.
 @echo Installing framework-res.apk
 java -jar %~dp0bin/apktool.jar if %~dp0framework/framework-res.apk >nul
+if exist %~dp0framework/twframework-res.apk (
 @echo Installing twframework-res.apk
 java -jar %~dp0bin/apktool.jar if %~dp0framework/twframework-res.apk >nul
+)
+if exist %~dp0framework/samsung-framework-res.apk (
+@echo Installing twframework-res.apk
+java -jar %~dp0bin/apktool.jar if %~dp0framework/samsung-framework-res.apk >nul
+)
 @echo Installing SystemUI.apk
 java -jar %~dp0bin/apktool.jar if %~dp0framework/SystemUI.apk >nul
 call :done
